@@ -1,0 +1,37 @@
+.message {
+    p {
+      color: #8a898b;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 0px;
+      max-width: 95%;
+      min-width: 55%;
+      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+      padding: 10px 15px 10px 7px;
+      margin: 5px 0;
+      background: white;
+    }
+
+  .message-incoming {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    p {
+      color: white;
+      border-radius: 0 11px 11px 11px;
+      background: blue;
+    }
+  }
+  .message-outgoing {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    p {
+        border-radius: 0 11px 11px 11px;
+      background: blue;
+      border-radius: 11px 11px 0 11px;
+    }
+  }
+}

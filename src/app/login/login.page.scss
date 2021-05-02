@@ -1,0 +1,35 @@
+img{
+    margin: auto;
+    height: 40%;
+    width:50%;
+    display: block;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+  *{
+  
+    font-family: Comfortaa;
+  }
+  h3{
+    font-weight: bold;
+  }
+  ion-item ion-input{
+    outline-color: black;
+    border-width: thin;
+    outline-style: auto;
+    margin: 10px;
+    --padding-start: 10px;
+  }
+  ion-button{
+    outline-color: black;
+  }
+  .form ion-item ion-input input{
+  
+  }
+  .errors {
+    font-size: small;
+    color: #fff;
+    background: var(--ion-color-danger);
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }

@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>chats</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list-header>
+    Profile
+  </ion-list-header>
+  <ion-item>
+    <ion-avatar>
+      <img src="{{dp}}" alt="">
+    </ion-avatar>
+    <ion-label>
+      <h2><b>{{name}}</b></h2>
+      <p>@{{mail}}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-list-header>
+    Users
+  </ion-list-header>
+  <ion-item lines=none *ngFor ='let chat of chat' (click)="buddychat(chat)" >
+    <ion-avatar>
+      <img src="{{user.img}}" alt="">
+    </ion-avatar>
+    <ion-label>
+      <h2><b>{{chat.name}}</b></h2>
+      <p>@{{chat.mail}}</p>
+    </ion-label>
+  </ion-item>
+
+
+  <ion-button full=solid (click)="newgroup()">CHAT ROOM</ion-button>
+
+
+  <ion-fab vertical="center" horizontal="end" >
+    <ion-fab-button (click)="user()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

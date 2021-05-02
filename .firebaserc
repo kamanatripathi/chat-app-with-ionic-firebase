@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "fir-app-b8d79": {
+      "hosting": {
+        "app": [
+          "fir-app-b8d79"
+        ]
+      }
+    }
+  }
+}

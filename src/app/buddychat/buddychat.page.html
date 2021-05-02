@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-avatar item-left>
+      <img src= "{{buddy.img}}">
+  </ion-avatar> -->
+    <ion-title>{{buddy.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+
+<ion-grid class="message">
+  <ion-row *ngFor= "let item of chat" >
+    <ion-col siae="9" *ngIf="item.uid!=buddy.uid"  else uid  class="message-incoming"> </ion-col>
+    <ion-label class="ion-text-right" *ngIf="!item.isUploading">
+      <p (click)="openFile(item.message)">{{item.message}}</p>
+    </ion-label>
+    <ion-label class="ion-text-right" *ngIf="item.isUploading">
+      <p>{{item.fileName}}</p>
+    </ion-label>
+
+     <ion-icon *ngIf= "item.fileType" slot="start" name="{{getIcon(item.fileType)}}" 
+    color="{{getIconColor(item.fileType)}}">
+  </ion-icon>
+    <!-- <div class="time" text-right><br>
+      {{item.timestamp | date:'short'}}
+    </div> -->
+
+    <ng-template #uid  >
+      <ion-label class="ion-text-left" >
+        <p class="message-outgoing" (click)="openFile(item.message)">  {{item.message}}</p>
+      </ion-label>
+    
+      <ion-icon *ngIf= "item.fileType" slot="start" name="{{getIcon(item.fileType)}}" 
+      color="{{getIconColor(item.fileType)}}">
+      </ion-icon>
+
+
+      <!-- <div class="time" text-right><br>  {{item.timestamp | date:'short'}}</div> -->
+    </ng-template>
+  </ion-row>
+</ion-grid>
+
+
+<!-- <ion-grid>
+  <ion-row *ngFor="let message of chat ">
+    <ion-col size="9" class="message"
+      [offset]="message.message ? 3 : 0"
+      [ngClass]="{ 'my-message': !id, 'other-message': id }">
+      <span>{{ message.message }}
+      </span>
+      <div class="time ion-text-right"><br>{{ message.timestamp| date:'short' }}</div>
+    </ion-col>
+  </ion-row>
+</ion-grid> -->
+
+</ion-content>
+
+
+<ion-footer ion-fixed>
+  <ion-toolbar class="no-border" color="white">
+  <input type="file" id="file" style="display: none;" (change)="detectFiles()">
+    <ion-item>
+      <ion-input [(ngModel)]="newMessage" placeholder="Write new message..">  </ion-input>
+   <!-- Attach a file button -->
+      <ion-button fill="clear" slot="end" (click)="triggerFile()"> 
+        <ion-icon slot="icon-only" name="document-attach-outline"></ion-icon>
+      </ion-button>
+      <!-- Send message button -->
+      <ion-button fill="clear" slot="end" (click)="addMessage()">
+        <ion-icon slot="icon-only" name="send-outline" color="primary"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+
+  </ion-toolbar>
+</ion-footer>

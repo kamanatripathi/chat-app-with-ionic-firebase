@@ -1,0 +1,8 @@
+{
+  "name": "LPC",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

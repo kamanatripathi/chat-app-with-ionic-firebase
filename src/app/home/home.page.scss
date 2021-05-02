@@ -1,0 +1,56 @@
+#container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+.sign{
+  --border-color: black;
+  outline-style: auto;
+  outline-color: black;
+  color: black;
+  --background-activated: white;
+  transition: opacity 1s linear;
+  border-width: thin;
+  font-weight: bold;
+}
+.login{
+  outline-style: auto;
+  outline-color: black;
+  border-width: thin;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+
+  --border-color: #1e2023;
+  --background-activated: black;
+  --color-activated: white;
+  transition: opacity 1s linear;
+
+}
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+*{
+
+  font-family: Comfortaa;
+}

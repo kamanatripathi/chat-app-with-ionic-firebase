@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>My Notes</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/todo-detail">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+ 
+  <ion-list>
+    <ion-item button [routerLink]="['/todo-detail', idea?.id]" *ngFor="let idea of ideas; trackBy: trackByFn  ">
+   <h2> {{ idea.name}}</h2> <br/>
+   <p>{{ idea.notes}}</p> 
+    </ion-item>
+    
+  </ion-list>
+</ion-content>
