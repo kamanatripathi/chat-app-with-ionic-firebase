@@ -2,51 +2,63 @@
   <ion-toolbar>
     <ion-title>Chat Room</ion-title>
     <ion-buttons>
-      <ion-button icon-only (click)="Vote()">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
+      <ion-button icon-only (click)="Vote()"><ion-icon name="add"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 
 
-<ion-content padding>
+  <ion-content padding>
 
-  <div class="chat" *ngFor="let chat of chatRef | async">
-    <div class="me" *ngIf="uid==chat.UserID">
-      {{chat.Message}}
+    <div class="chat" *ngFor= "let chat of chatRef | async">
+        <div class="me" *ngIf = "uid==chat.UserID">
+          {{chat.Message}}
 
-      <div class="me" *ngIf="chat.Message =='POLL' ">
-        <h1>{{chat.poll}}</h1>
-        <ion-button>{{chat.option1}}</ion-button>
-        <ion-button>{{chat.option2}}</ion-button>
+        <div  class="me" *ngIf = "chat.Message =='POLL' "  >
+          <h1>{{chat.poll}}</h1>
+
+          <div *ngIf="voted == false">
+            <ion-button  (click)="opinionClick('yes',chat.id)" >{{chat.option1}}</ion-button>
+            <ion-button  (click)="opinionClick('no',chat.id)" >{{chat.option2}}</ion-button>
+          </div>
+          <div *ngIf="voted == true">
+              <p> Thanks for Sharing Your Opinion </p>
+          </div>
+        </div>
+        </div>
+
+        <div class="you" *ngIf = "uid!=chat.UserID">
+          <span class="name">{{chat.Name}}</span>
+         <br> {{chat.Message}}
+
+
+        <div class="name" *ngIf = "chat.Message =='POLL'" >
+          <h1>{{chat.poll}}</h1>
+
+          <div *ngIf="voted == false">
+            <ion-button  (click)="opinionClick('yes',chat.id)" >{{chat.option1}}</ion-button>
+            <ion-button  (click)="opinionClick('no',chat.id)" >{{chat.option2}}</ion-button>
+          </div>
+
+          <div *ngIf="voted == true">
+              <p> Thanks for Sharing Your Opinion </p>
+          </div>
+
+        </div>
       </div>
     </div>
 
-    <div class="you" *ngIf="uid!=chat.UserID">
-      <span class="name">{{chat.Name}}</span>
-      <br> {{chat.Message}}
-
-
-      <div class="name" *ngIf="chat.Message =='POLL'">
-        <h1>{{chat.poll}}</h1>
-        <ion-button (click)="opinion_click('yes')">{{chat.option1}}</io`n-button>
-        <ion-button (click)="opinion_click('no')">{{chat.option2}}</ion-button>
-      </div>
-    </div>
-  </div>
-
-</ion-content>
+  </ion-content>
 
 
 
 
-<ion-footer>
-  <ion-toolbar>
-    <ion-input type="text" name="message" placeholder="Message" [(ngModel)]="message"></ion-input>
-    <ion-button fill='clear' icon-only slot="end" (click)="sendMessage()">
-      <ion-icon name="send"></ion-icon>
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
+  <ion-footer>
+    <ion-toolbar>
+      <ion-input type="text" name="message" placeholder="Message" [(ngModel)]="message"></ion-input>
+        <ion-button fill='clear' icon-only slot="end"  (click)="sendMessage()">
+          <ion-icon name="send"></ion-icon>
+        </ion-button>
+    </ion-toolbar>
+  </ion-footer>

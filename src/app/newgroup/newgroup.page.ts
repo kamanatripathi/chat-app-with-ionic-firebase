@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, snapshotChanges } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AlertController, LoadingController } from '@ionic/angular';
@@ -26,14 +26,8 @@ import { PollPageModule } from '../poll/poll.module';
 export class NewgroupPage implements OnInit {
 
   @ViewChild('imageProd') inputimageProd: ElementRef;
-  uploadPercent: Observable<number>;
-  urlImage: Observable<string>;
-  newgroup={
-    groupName: 'GroupName',
-    groupPic:''
-  }
+
   nativepath: any;
-  id: any;
   imageSrc: string;
   chat$: Observable<any>;
   newMsg: string;
@@ -41,53 +35,132 @@ export class NewgroupPage implements OnInit {
   chatRef: any;
   message: any;
   name: string;
-  opinion : string = null;
-  voted : boolean = false;
 
-   poll = [{
-    poll :'name',
-    option1 : 'yes',
-    option3: 'no'
-  }]
-score: number=0;
-  constructor(public loadingController: LoadingController,public afs:AngularFirestore,private route: ActivatedRoute,
-    public alerCtrl:AlertController,public db:AngularFireDatabase,public storage:StorageService,public filechooser: FileChooser
-    ,public file:File,public FilePath : FilePath,public camera:Camera,    private afstorage: AngularFireStorage,
-    public router: Router,public popover:PopoverController
+  id:string;
+  voted ;
+  opinion: string = null;
+
+  countoption1:number;
+  countoption2:number;
 
 
-    
-    ) { 
+  constructor(public loadingController: LoadingController,public afs: AngularFirestore,private route: ActivatedRoute,
+    public alerCtrl: AlertController,public db: AngularFireDatabase,public storage: StorageService,public filechooser: FileChooser
+    ,public file: File,public FilePath: FilePath,public camera: Camera,    private afstorage: AngularFireStorage,
+    public router: Router,public popover: PopoverController
+
+
+
+    ) {
       this.uid= sessionStorage.getItem('user_uid');
      this.name=  sessionStorage.getItem('user_name');
       this.chatRef= this.afs.collection('groups',ref=>
       ref.orderBy('Timestamp')).valueChanges();
-      console.log(this.chatRef);      
+      console.log(this.chatRef);
+
+      this.db.database.app.firestore().collection('groups').get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            // console.log(doc.id, " => ", doc.data());
+        })
+      });
 
 
-    }
+    } 
 
   ngOnInit() {
-    
+
 
   }
 
-  opinion_click(value){
-    this.opinion = value;
-    this.voted = true;
-    console.log(value);
+
+
+  opinionClick(result,id) {
+  
+  
+
+
+    this.opinion = result;
+      this.voted = true;
+      console.log(id)
+  const gr=    this.db.database.app.firestore().collection('groups').doc(id);
+    gr.get().then(doc=>{
+    console.log ( [doc.data()]);
+    this.countoption1 = doc.data().countoption1;
+    this.countoption2 = doc.data().countoption2;
+    console.log ( this.countoption1);
+    console.log ( this.countoption2);
+    if(this.opinion === 'yes'){
+      this.countoption1++;
+      console.log(this.countoption1);
+
+      this.db.database.app.firestore().collection('groups')
+      .doc(id).collection(this.uid).
+      add({
+          voter:{
+            voter_id : this.uid,
+            voted : 'true'
+          }
+      })
+      
+      this.db.database.app.firestore().collection('groups')
+      .doc(id).update
+      ({
+        countoption1: this.countoption1,
+      })
+      
+  
+    } 
+    else{
+        this.countoption2++;
+        console.log(this.countoption2);
+      this.db.database.app.firestore().collection('groups')
+      .doc(id).collection(this.uid).
+      add({
+          voter:{
+            voter_id : this.uid,
+            voted : 'true'
+          }
+      })
+      
+      this.db.database.app.firestore().collection('groups')
+      .doc(id).update
+      ({
+        countoption2: this.countoption2,
+      })
+      
+
+      }
+  })
+  this.db.database.app.firestore().collection('groups')
+    .doc(id).collection(this.uid)
+    .get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+          console.log(doc.data());
+          this.voted = doc.data().voted;
+      })
+    });
+
+
+
   }
+
+
 
 
   sendMessage(){
     if(this.message != ''){
-      this.afs.collection('groups').add({
+      this.id = this.afs.createId();
+      this.afs.collection('groups').doc(this.id)
+      .set
+      ({
         Name : this.name,
         Message: this.message,
         UserID:  this.uid,
+        id:this.id,
         Timestamp:firebase.default.firestore.FieldValue.serverTimestamp(),
-      })
-      this.message=''
+      });
+      this.message='';
     }
 
   }
@@ -98,51 +171,51 @@ score: number=0;
 
 
   async  Vote(){
-    this.router.navigateByUrl('/poll')
+    this.router.navigateByUrl('/poll');
     }
-    
+
 
 
         grouppicstore(groupname) {
-          var promise = new Promise((resolve, reject) => {
+          const promise = new Promise((resolve, reject) => {
               this.filechooser.open().then((url) => {
                 (<any>window).FilePath.resolveNativePath(url, (result) => {
                   this.nativepath = result;
                   (<any>window).resolveLocalFileSystemURL(this.nativepath, (res) => {
                     res.file((resFile) => {
-                      var reader = new FileReader();
+                      const reader = new FileReader();
                       reader.readAsArrayBuffer(resFile);
                       reader.onloadend = (evt: any) => {
-                        
-                        var imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
+
+                        const imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
                         this.storage.get('user_uid').then(uid=>{
-                          
+
                           const filePath = '/groupimages/';
-                          console.log(filePath)
-                          var imageStore = this.afstorage.ref(filePath).child(uid).child(groupname);
+                          console.log(filePath);
+                          const imageStore = this.afstorage.ref(filePath).child(uid).child(groupname);
                         imageStore.upload(imgBlob).then((res) => {
-                          console.log("dd",res)
+                          console.log('dd',res);
 
                           this.afstorage.ref('/groupimages/').child(uid).child(groupname).getDownloadURL().then((url) => {
-                            console.log("Done")
+                            console.log('Done');
                             resolve(url);
                           }).catch((err) => {
                               reject(err);
-                          })
+                          });
                         }).catch((err) => {
                           reject(err);
-                        })
-                      })
-                      }
-                  })
-                  })
-                })
-            })
-          })    
-           return promise;   
+                        });
+                      });
+                      };
+                  });
+                  });
+                });
+            });
+          });
+           return promise;
         }
-     
-        
+
+
 
 
 
