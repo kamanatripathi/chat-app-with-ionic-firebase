@@ -41,6 +41,8 @@ export class NewgroupPage implements OnInit {
   chatRef: any;
   message: any;
   name: string;
+  opinion : string = null;
+  voted : boolean = false;
 
    poll = [{
     poll :'name',
@@ -61,7 +63,7 @@ score: number=0;
       this.chatRef= this.afs.collection('groups',ref=>
       ref.orderBy('Timestamp')).valueChanges();
       console.log(this.chatRef);      
-          
+
 
     }
 
@@ -70,16 +72,13 @@ score: number=0;
 
   }
 
-  option1(){
-    this.score++;
-    console.log(this.score);
-
+  opinion_click(value){
+    this.opinion = value;
+    this.voted = true;
+    console.log(value);
   }
-  option2(){
-    this.score++;
-    console.log(this.score);
 
-  }
+
   sendMessage(){
     if(this.message != ''){
       this.afs.collection('groups').add({
