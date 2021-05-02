@@ -31,7 +31,7 @@ export class NewgroupPage implements OnInit {
   newgroup={
     groupName: 'GroupName',
     groupPic:''
-  }
+  };
   nativepath: any;
   id: any;
   imageSrc: string;
@@ -42,32 +42,45 @@ export class NewgroupPage implements OnInit {
   message: any;
   name: string;
 
+
+  voted = false;
+  opinion: string = null;
+
+
+
    poll = [{
     poll :'name',
     option1 : 'yes',
     option3: 'no'
-  }]
-score: number=0;
-  constructor(public loadingController: LoadingController,public afs:AngularFirestore,private route: ActivatedRoute,
-    public alerCtrl:AlertController,public db:AngularFireDatabase,public storage:StorageService,public filechooser: FileChooser
-    ,public file:File,public FilePath : FilePath,public camera:Camera,    private afstorage: AngularFireStorage,
-    public router: Router,public popover:PopoverController
+  }];
+score=0;
+  constructor(public loadingController: LoadingController,public afs: AngularFirestore,private route: ActivatedRoute,
+    public alerCtrl: AlertController,public db: AngularFireDatabase,public storage: StorageService,public filechooser: FileChooser
+    ,public file: File,public FilePath: FilePath,public camera: Camera,    private afstorage: AngularFireStorage,
+    public router: Router,public popover: PopoverController
 
 
-    
-    ) { 
+
+    ) {
       this.uid= sessionStorage.getItem('user_uid');
      this.name=  sessionStorage.getItem('user_name');
       this.chatRef= this.afs.collection('groups',ref=>
       ref.orderBy('Timestamp')).valueChanges();
-      console.log(this.chatRef);      
-          
+      console.log(this.chatRef);
+
 
     }
 
   ngOnInit() {
-    
 
+
+  }
+
+
+
+  opinionClick(result) {
+    this.opinion = result;
+    this.voted = true;
   }
 
   option1(){
@@ -87,8 +100,8 @@ score: number=0;
         Message: this.message,
         UserID:  this.uid,
         Timestamp:firebase.default.firestore.FieldValue.serverTimestamp(),
-      })
-      this.message=''
+      });
+      this.message='';
     }
 
   }
@@ -99,51 +112,51 @@ score: number=0;
 
 
   async  Vote(){
-    this.router.navigateByUrl('/poll')
+    this.router.navigateByUrl('/poll');
     }
-    
+
 
 
         grouppicstore(groupname) {
-          var promise = new Promise((resolve, reject) => {
+          const promise = new Promise((resolve, reject) => {
               this.filechooser.open().then((url) => {
                 (<any>window).FilePath.resolveNativePath(url, (result) => {
                   this.nativepath = result;
                   (<any>window).resolveLocalFileSystemURL(this.nativepath, (res) => {
                     res.file((resFile) => {
-                      var reader = new FileReader();
+                      const reader = new FileReader();
                       reader.readAsArrayBuffer(resFile);
                       reader.onloadend = (evt: any) => {
-                        
-                        var imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
+
+                        const imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
                         this.storage.get('user_uid').then(uid=>{
-                          
+
                           const filePath = '/groupimages/';
-                          console.log(filePath)
-                          var imageStore = this.afstorage.ref(filePath).child(uid).child(groupname);
+                          console.log(filePath);
+                          const imageStore = this.afstorage.ref(filePath).child(uid).child(groupname);
                         imageStore.upload(imgBlob).then((res) => {
-                          console.log("dd",res)
+                          console.log('dd',res);
 
                           this.afstorage.ref('/groupimages/').child(uid).child(groupname).getDownloadURL().then((url) => {
-                            console.log("Done")
+                            console.log('Done');
                             resolve(url);
                           }).catch((err) => {
                               reject(err);
-                          })
+                          });
                         }).catch((err) => {
                           reject(err);
-                        })
-                      })
-                      }
-                  })
-                  })
-                })
-            })
-          })    
-           return promise;   
+                        });
+                      });
+                      };
+                  });
+                  });
+                });
+            });
+          });
+           return promise;
         }
-     
-        
+
+
 
 
 

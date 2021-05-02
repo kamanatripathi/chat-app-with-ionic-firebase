@@ -11,10 +11,10 @@
 
   <ion-content padding>
 
-    <div class="chat" *ngFor= "let chat of chatRef | async"> 
+    <div class="chat" *ngFor= "let chat of chatRef | async">
         <div class="me" *ngIf = "uid==chat.UserID">
           {{chat.Message}}
-        
+
         <div  class="me" *ngIf = "chat.Message =='POLL' "  >
           <h1 >{{chat.poll}}</h1>
               <ion-button>{{chat.option1}}</ion-button>
@@ -26,20 +26,28 @@
           <span class="name">{{chat.Name}}</span>
          <br> {{chat.Message}}
 
-     
-        <div  class="name" *ngIf = "chat.Message =='POLL'" >
-          <h1 >{{chat.poll}}</h1>
-              <ion-button (click)="option1()" >{{chat.option1}}</ion-button>
-            <ion-button (click)="option2()" >{{chat.option2}}</ion-button>
+
+        <div class="name" *ngIf = "chat.Message =='POLL'" >
+          <h1>{{chat.poll}}</h1>
+
+          <div *ngIf="voted == false">
+            <ion-button   (click)="opinionClick('yes')" >{{chat.option1}}</ion-button>
+            <ion-button  (click)="opinionClick('no')" >{{chat.option2}}</ion-button>
+          </div>
+
+          <div *ngIf="voted == true">
+              <p> Thanks for Sharing Your Opinion </p>
+          </div>
+
         </div>
-      </div> 
+      </div>
     </div>
-    
+
   </ion-content>
 
 
 
-  
+
   <ion-footer>
     <ion-toolbar>
       <ion-input type="text" name="message" placeholder="Message" [(ngModel)]="message"></ion-input>
