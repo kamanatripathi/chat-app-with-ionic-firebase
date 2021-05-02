@@ -27,6 +27,8 @@ export class PollPage implements OnInit {
       option1: mail1,
       option2:mail2,
       UserID:  this.uid,
+      countoption1 : 0,
+      countoption2: 0,
       Message: 'POLL',
       Timestamp:firebase.default.firestore.FieldValue.serverTimestamp(),
     })

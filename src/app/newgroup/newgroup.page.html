@@ -31,7 +31,7 @@
           <h1>{{chat.poll}}</h1>
 
           <div *ngIf="voted == false">
-            <ion-button   (click)="opinionClick('yes')" >{{chat.option1}}</ion-button>
+            <ion-button  (click)="opinionClick('yes')" >{{chat.option1}}</ion-button>
             <ion-button  (click)="opinionClick('no')" >{{chat.option2}}</ion-button>
           </div>
 

@@ -46,13 +46,8 @@ export class NewgroupPage implements OnInit {
   voted = false;
   opinion: string = null;
 
-
-
-   poll = [{
-    poll :'name',
-    option1 : 'yes',
-    option3: 'no'
-  }];
+  countoption1=0;
+  countoption2=0;
 score=0;
   constructor(public loadingController: LoadingController,public afs: AngularFirestore,private route: ActivatedRoute,
     public alerCtrl: AlertController,public db: AngularFireDatabase,public storage: StorageService,public filechooser: FileChooser
@@ -80,6 +75,15 @@ score=0;
 
   opinionClick(result) {
     this.opinion = result;
+
+    if(this.opinion === 'yes'){
+      this.countoption1++;
+    } else {
+      this.countoption2++;
+    }
+  console.log(this.countoption2);
+    console.log(this.countoption1);
+
     this.voted = true;
   }
 
