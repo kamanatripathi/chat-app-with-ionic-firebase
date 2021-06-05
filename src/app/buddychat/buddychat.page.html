@@ -10,41 +10,35 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
+<ion-content padding>
 
-<ion-grid class="message">
-  <ion-row *ngFor= "let item of chat" >
-    <ion-col siae="9" *ngIf="item.uid!=buddy.uid"  else uid  class="message-incoming"> </ion-col>
-    <ion-label class="ion-text-right" *ngIf="!item.isUploading">
-      <p (click)="openFile(item.message)">{{item.message}}</p>
-    </ion-label>
-    <ion-label class="ion-text-right" *ngIf="item.isUploading">
-      <p>{{item.fileName}}</p>
-    </ion-label>
+<div class="chat"  *ngFor= "let item of chat ">
+  <div class="me" *ngIf ="item.uid!=buddy.uid">
+      {{item.Message}}
+      
+<ion-label class="ion-text-right" *ngIf="!item.isUploading">
+  <p (click)="openFile(item.message)">{{item.message}}</p>
+</ion-label>
 
-     <ion-icon *ngIf= "item.fileType" slot="start" name="{{getIcon(item.fileType)}}" 
+<ion-label class="ion-text-right" *ngIf="item.isUploading">
+  <p>{{item.fileName}}</p>
+</ion-label>
+ <ion-icon *ngIf= "item.fileType" slot="start" name="{{getIcon(item.fileType)}}" 
+color="{{getIconColor(item.fileType)}}">
+</ion-icon>
+
+</div>
+
+<div class="you" *ngIf = "item.uid===buddy.uid">
+  <span class="name">{{item.Name}}</span>
+  <ion-label class="ion-text-left" >
+      <p class="message-outgoing" (click)="openFile(item.message)">  {{item.message}}</p>
+    </ion-label>
+    <ion-icon *ngIf= "item.fileType" slot="start" name="{{getIcon(item.fileType)}}" 
     color="{{getIconColor(item.fileType)}}">
-  </ion-icon>
-    <!-- <div class="time" text-right><br>
-      {{item.timestamp | date:'short'}}
-    </div> -->
-
-    <ng-template #uid  >
-      <ion-label class="ion-text-left" >
-        <p class="message-outgoing" (click)="openFile(item.message)">  {{item.message}}</p>
-      </ion-label>
-    
-      <ion-icon *ngIf= "item.fileType" slot="start" name="{{getIcon(item.fileType)}}" 
-      color="{{getIconColor(item.fileType)}}">
-      </ion-icon>
-
-
-      <!-- <div class="time" text-right><br>  {{item.timestamp | date:'short'}}</div> -->
-    </ng-template>
-  </ion-row>
-</ion-grid>
-
-
+    </ion-icon>
+</div>
+</div>
 <!-- <ion-grid>
   <ion-row *ngFor="let message of chat ">
     <ion-col size="9" class="message"

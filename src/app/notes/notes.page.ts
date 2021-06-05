@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdeaService, Idea} from '../services/idea.service';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -19,25 +19,27 @@ export class NotesPage implements OnInit {
   // ideas: any;
   ideas: Idea[];
   id: string;
+  
 
   private ideass: Observable<Idea[]>;
 
   constructor(private activatedRoute: ActivatedRoute,
     private toastCtrl: ToastController, private router: Router,
     private afs: AngularFirestore,public storage:StorageService,
-    public db: AngularFireDatabase
+    public db: AngularFireDatabase,public loadingController:LoadingController
     )
-   { }
+   {this.ngOnInit() }
 
   ngOnInit() {
     this.get()
   } 
   get(){
+    this.presentLoading();
     this.storage.get('user_uid').then((res)=>{
       console.log("ddd",res)
     const db= this.db.database.app.firestore().collection("idea");
     db.where("field","==",res).get().then((querysnapshot)=>{
-
+      this.loadingController.dismiss()
       let arr: Idea[] = [];
   
       querysnapshot.forEach((doc)=>{
@@ -55,9 +57,20 @@ export class NotesPage implements OnInit {
   })
    }
 
-  
+    async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Loading Data.. Please Wait',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+
+    console.log('Loading dismissed!');
+  }
    trackByFn(index: number, item: any): number {
     return index; // or item.id
   }
+
 
 }

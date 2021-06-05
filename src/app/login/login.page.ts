@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -15,15 +15,31 @@ export class LoginPage implements OnInit {
 
   passwordType = 'password';
   passwordIcon = 'eye-off';
-  constructor(public afs: AngularFireAuth, public rout: Router ,  public alertController: AlertController) { }
-  async login() {
+  constructor(public afs: AngularFireAuth, public rout: Router , 
+     public alertController: AlertController, public loading: LoadingController) { }
 
+     async presentLoading() {
+      const loading = await this.loading.create({
+        cssClass: 'my-custom-class',
+        message: 'Please wait...',
+        duration: 2000
+      });
+      await loading.present();
+  
+      const { role, data } = await loading.onDidDismiss();
+      console.log('Loading dismissed!');
+    }
+
+  
+  async login() {
     const { username, password } = this;
     console.log(username, password);
+    this.presentLoading();
     try {
       const res = await this.afs.signInWithEmailAndPassword(username, password);
       console.log(res);
       setTimeout(() => {
+        this.loading.dismiss()
         this.rout.navigateByUrl('');
       }, 1000);
     } catch (error) {

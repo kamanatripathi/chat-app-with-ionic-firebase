@@ -1,11 +1,34 @@
-<header>
+<!-- <header>
   <div class="big-circle top-circle-big">
     <div class="medium-circle inner-circle-medium"></div>
     <div class="small-circle inner-circle-small"></div>
     <div class="todo-text">TODO</div>
   </div>
-</header>
+</header> -->
+      <ion-buttons  slot="start">
+          <ion-button [routerLink]="['/']"  >
+            <ion-icon mode="ios" color="primary" slot="icon-only" name="arrow-back"></ion-icon>
+         </ion-button>
+      </ion-buttons>
 <ion-content>
+  <div>
+    <div  >
+    <ion-row >
+      <ion-col class="ion-text-left" size="1"> 
+        <p style="padding-left: 10px;font-weight: bold;font-size: 36px;"> {{today | date:'d'}}</p> 
+
+      </ion-col>
+      <ion-col class="ion-text-left" size="2">
+        <p style="padding-left: 13px;font-weight: bold;font-size: 20px;"> {{today | date:'MMM'}}</p> 
+        <p style="padding-left: 13px;font-weight: bold;font-size: 20px;"> {{today | date:'y'}}</p> 
+      </ion-col>
+      <ion-col class="ion-text-right" size="9">
+        <h3 class="ion-text-right" style="font-weight: bold">{{today | date:'EEEE'}}</h3>
+      </ion-col>
+    </ion-row>  
+    </div>
+
+  </div>
   <div class="list-header">List</div>
   <ion-list #slidingList>
     <ion-item-sliding *ngFor="let message of messages; trackBy: trackByFn">
@@ -22,7 +45,7 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-fab>
+  <ion-fab >
     <ion-fab-button (click)="addItem()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

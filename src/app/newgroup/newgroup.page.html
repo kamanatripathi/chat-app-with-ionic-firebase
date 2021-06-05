@@ -1,8 +1,13 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/']"  >
+        <ion-icon mode="ios" color="primary" slot="icon-only" name="arrow-back"></ion-icon>
+     </ion-button>
+     </ion-buttons>
     <ion-title>Chat Room</ion-title>
-    <ion-buttons>
-      <ion-button icon-only (click)="Vote()"><ion-icon name="add"></ion-icon></ion-button>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="Vote()">POLL</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -22,8 +27,10 @@
             <ion-button  (click)="opinionClick('yes',chat.id)" >{{chat.option1}}</ion-button>
             <ion-button  (click)="opinionClick('no',chat.id)" >{{chat.option2}}</ion-button>
           </div>
-          <div *ngIf="voted == true">
+          <div *ngIf="voted != false">
               <p> Thanks for Sharing Your Opinion </p>
+              {{chat.option1}}:  {{chat.countoption1}}
+              {{chat.option2}}:  {{chat.countoption2}}  
           </div>
         </div>
         </div>
@@ -41,9 +48,11 @@
             <ion-button  (click)="opinionClick('no',chat.id)" >{{chat.option2}}</ion-button>
           </div>
 
-          <div *ngIf="voted == true">
+          <div *ngIf="voted != false">
               <p> Thanks for Sharing Your Opinion </p>
-          </div>
+              {{chat.option1}}:  {{chat.countoption1}}
+              {{chat.option2}}:  {{chat.countoption2}}            
+            </div>
 
         </div>
       </div>

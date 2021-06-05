@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Directive, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -14,7 +14,8 @@ import { ServiceService, Todo } from '../services/service.service';
   styleUrls: ['./todo-detail.page.scss'],
 })
 export class TodoDetailPage implements OnInit {
- 
+  today: number = Date.now();
+
   idea: Idea = {
     name: '',
     notes: ''

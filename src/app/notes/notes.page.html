@@ -1,21 +1,37 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar color="primary">
     <ion-title>My Notes</ion-title>
   </ion-toolbar>
-</ion-header>
- 
+</ion-header> -->
+<ion-buttons  slot="start">
+  <ion-button [routerLink]="['/']"  >
+    <ion-icon mode="ios" color="primary" slot="icon-only" name="arrow-back"></ion-icon>
+ </ion-button>
+</ion-buttons>
+<h3 class="ion-text-center" style="font-weight: bold;"> Notes</h3>
 <ion-content>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="center"  slot="fixed">
     <ion-fab-button routerLink="/todo-detail">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
  
-  <ion-list>
-    <ion-item button [routerLink]="['/todo-detail', idea?.id]" *ngFor="let idea of ideas; trackBy: trackByFn  ">
-   <h2> {{ idea.name}}</h2> <br/>
-   <p>{{ idea.notes}}</p> 
-    </ion-item>
-    
-  </ion-list>
+  <ion-grid  *ngFor="let idea of ideas; trackBy: trackByFn  ">
+    <ng-container>
+      <ion-row button [routerLink]="['/todo-detail', idea?.id]">
+        <ion-col col-12 col-xl-2 col-lg-3 col-md-4 >
+          <ion-card size="6">
+            <ion-card-title >
+              {{ idea.name}}
+            </ion-card-title>
+            <ion-card-content>
+              {{idea.notes}}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      
+    </ng-container>
+  </ion-grid>
+  
 </ion-content>

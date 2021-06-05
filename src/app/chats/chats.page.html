@@ -1,13 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+    <ion-title>Chats</ion-title>
+
+    <ion-buttons  slot="end">
+      <ion-button  (click)="newgroup()">Chat Room</ion-button>
     </ion-buttons>
-    <ion-title>chats</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+
   <ion-list-header>
     Profile
   </ion-list-header>
@@ -35,12 +38,12 @@
   </ion-item>
 
 
-  <ion-button full=solid (click)="newgroup()">CHAT ROOM</ion-button>
+  <!-- <ion-button full=solid (click)="newgroup()">CHAT ROOM</ion-button> -->
 
 
-  <ion-fab vertical="center" horizontal="end" >
+  <!-- <ion-fab vertical="center" horizontal="end" >
     <ion-fab-button (click)="user()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 </ion-content>

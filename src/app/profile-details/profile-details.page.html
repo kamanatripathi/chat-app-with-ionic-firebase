@@ -1,10 +1,11 @@
 <ion-header no-border>
   <ion-toolbar no-border>
-      <ion-buttons  slot="start">
+    <ion-title>Profile Details</ion-title>
+      <!-- <ion-buttons  slot="start">
           <ion-button [routerLink]="['/']"  >
             <ion-icon mode="ios" color="primary" slot="icon-only" name="arrow-back"></ion-icon>
          </ion-button>
-      </ion-buttons>
+      </ion-buttons> -->
     <ion-title  mode="ios" color="primary"></ion-title>
 
     <ion-buttons slot="end" >
@@ -22,48 +23,25 @@
   <div class="form" *ngIf="empty">
    
     
-    <div text-center>
+    <div class="ion-text-center"  >
 
       <img text-center class="circle"  src="{{item.img}}" alt="">
     </div>
-
-    <h2 class="goodfont" style="font-weight:bold;" text-center> @{{item.mail}}</h2>
-    <h3 text-center> {{item.name}}</h3>
-
-    <div text-center>
-       More thing of the profile 
-      <!-- <p> {{item[0].payload.doc.data().phone}}</p>
-      <p> {{item[0].payload.doc.data().mail}}</p>
-      <p> {{item[0].payload.doc.data().adress}}</p> -->
-
-    </div>
-    <br><br>
-    
+    <div class="info">
+    <h2 class="goodfont" style="font-weight:bold;" text-center> Mail : @{{item.mail}}</h2>
+    <h3 text-center> Name: {{item.name}}</h3>
+    <br><br>    
     <br>
+  </div>
   
     <ion-list padding>
-      <ion-item>
-        <ion-icon slot="start" name="moon"></ion-icon>
-        Dark mode 
-        <ion-toggle  (ionChange)="update($event)" slot="end" color="primary"></ion-toggle>
-      </ion-item>
-
-      <ion-item>
-          <ion-icon color="primary" slot="start" name="notifications"></ion-icon>
-            Notifications         
-      </ion-item>
       <ion-item (click)="todo()">
         <ion-icon color="tertiary" slot="start" name="mail-unread" ></ion-icon>
-        todo 
+        Todo 
         </ion-item>
       <ion-item (click)="notes()">
-            <ion-icon color="secondary" slot="start" name="settings"></ion-icon>
+            <ion-icon color="secondary" slot="start" name="book"></ion-icon>
               Notes       
-        </ion-item>
-
-        <ion-item>
-            <ion-icon color="success" slot="start" name="help"></ion-icon>
-              Help center         
         </ion-item>
         <ion-item (click)="signOut()">
             <ion-icon color="danger" slot="start" name="log-out"></ion-icon>
@@ -75,13 +53,13 @@
     <br>
     <br>
     <br>
-    <p style="color: gray; font-size: 13px" text-center bold>User id : {{ uid }} </p>
+    <!-- <p style="color: gray; font-size: 13px" text-center bold>User id : {{ uid }} </p> -->
 
     <br>
     <br>
   </div>
 
-  <div class="form" text-center *ngIf="!empty">
+  <div class="form" text-center *ngIf="!empty" >
 
    
       
@@ -89,7 +67,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="12" text-center>
-          <img width="200px" style="margin-top:32px;" src="assets/user.svg" alt="">
+          <img  width="200px" style="margin-top:32px;" src="assets/user.svg" alt="">
         </ion-col>
         <ion-col size="12" text-center>
           <h3>Fill your profile</h3>

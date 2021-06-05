@@ -76,10 +76,6 @@ export class NewgroupPage implements OnInit {
 
 
   opinionClick(result,id) {
-  
-  
-
-
     this.opinion = result;
       this.voted = true;
       console.log(id)
@@ -174,46 +170,6 @@ export class NewgroupPage implements OnInit {
     this.router.navigateByUrl('/poll');
     }
 
-
-
-        grouppicstore(groupname) {
-          const promise = new Promise((resolve, reject) => {
-              this.filechooser.open().then((url) => {
-                (<any>window).FilePath.resolveNativePath(url, (result) => {
-                  this.nativepath = result;
-                  (<any>window).resolveLocalFileSystemURL(this.nativepath, (res) => {
-                    res.file((resFile) => {
-                      const reader = new FileReader();
-                      reader.readAsArrayBuffer(resFile);
-                      reader.onloadend = (evt: any) => {
-
-                        const imgBlob = new Blob([evt.target.result], { type: 'image/jpeg' });
-                        this.storage.get('user_uid').then(uid=>{
-
-                          const filePath = '/groupimages/';
-                          console.log(filePath);
-                          const imageStore = this.afstorage.ref(filePath).child(uid).child(groupname);
-                        imageStore.upload(imgBlob).then((res) => {
-                          console.log('dd',res);
-
-                          this.afstorage.ref('/groupimages/').child(uid).child(groupname).getDownloadURL().then((url) => {
-                            console.log('Done');
-                            resolve(url);
-                          }).catch((err) => {
-                              reject(err);
-                          });
-                        }).catch((err) => {
-                          reject(err);
-                        });
-                      });
-                      };
-                  });
-                  });
-                });
-            });
-          });
-           return promise;
-        }
 
 
 

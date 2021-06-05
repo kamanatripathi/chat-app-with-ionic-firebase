@@ -1,23 +1,28 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>Idea Details</ion-title>
   </ion-toolbar>
-</ion-header>
- 
+</ion-header> -->
+<ion-buttons  slot="start">
+  <ion-button [routerLink]="['/']"  >
+    <ion-icon mode="ios" color="primary" slot="icon-only" name="arrow-back"></ion-icon>
+ </ion-button>
+</ion-buttons>
+
+
+  <p>{{today | date:'MMM d,  h:mm a' }}</p>
 <ion-content padding>
  
   <ion-item>
-    <ion-label position="stacked">Name</ion-label>
-    <ion-input [(ngModel)]="idea.name"></ion-input>
+      <ion-input placeholder="Title" [(ngModel)]="idea.name"></ion-input>
   </ion-item>
- 
-  <ion-item>
-    <ion-label position="stacked">Notes</ion-label>
-    <ion-textarea [(ngModel)]="idea.notes" rows="8"></ion-textarea>
-  </ion-item>
+  <div class="text">
+    <ion-textarea placeholder="Notes" rows="6"  auto-grow="true" [(ngModel)]="idea.notes"></ion-textarea>
+
+  </div>
 </ion-content>
  
 <ion-footer *ngIf="!idea.id">

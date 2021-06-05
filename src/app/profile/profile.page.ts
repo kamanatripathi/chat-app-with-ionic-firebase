@@ -2,17 +2,23 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { finalize } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { ServiceService } from '../services/service.service';
 import { StorageService } from '../services/storage.service';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { File } from '@ionic-native/file/ngx';
+import{FingerprintAIO} from '@ionic-native/fingerprint-aio/ngx';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
+
 export class ProfilePage implements OnInit {
   @ViewChild('imageProd') inputimageProd: ElementRef;
   id: any;
@@ -27,13 +33,20 @@ export class ProfilePage implements OnInit {
   item: any;
   // username: string;
   cp: Boolean;
+
+
+  nativepath: any;
+  imageSrc: string;
+  base64Image: string;
+  downloadURL: Observable<any>;
+ 
   constructor(private rout: Router,
     private route: ActivatedRoute,
     private services: ServiceService,
-    private afs: AngularFireStorage,
-    private loadingController: LoadingController,
-    private aut: AngularFireAuth,
-    public storages: StorageService,
+    private afs: AngularFireStorage,public storage: StorageService,public filechooser: FileChooser,
+    private loadingController: LoadingController,public alertCtrl: AlertController,
+    private aut: AngularFireAuth,private camera: Camera,private file: File,
+    public storages: StorageService, public aio  : FingerprintAIO,
     public db: AngularFireDatabase) {
   
   }
@@ -44,8 +57,12 @@ export class ProfilePage implements OnInit {
     this.rout.navigateByUrl('/login');
     
   }
+  ionViewWillEnter(){
+    this.logueado();
+  }
   ngOnInit() {
     this.logueado();
+    this.subscreibe();
   }
 
   logueado() {
@@ -62,9 +79,11 @@ export class ProfilePage implements OnInit {
         });
   }
   async getProfile(id) {
+    this.presentLoading();
     var docRef = this.db.database.app.firestore().collection("user").doc(id);
     docRef.get().then((data) => {
         if (data.exists) {
+          this.loadingController.dismiss();
             // console.log("Document data:", data.data());
           this.item = data.data();
           this.name =this.item.name;
@@ -75,6 +94,7 @@ export class ProfilePage implements OnInit {
           console.log(this.item)
         }  
        else{  
+        this.loadingController.dismiss();
           console.log('empty');
        }
       }).catch((error) => {
@@ -82,7 +102,9 @@ export class ProfilePage implements OnInit {
     });
   }
 
+
   onUpload(e) {
+  
     console.log(e.target.files[0]);
 
     const id = Math.random().toString(36).substring(2);
@@ -94,35 +116,114 @@ export class ProfilePage implements OnInit {
     this.presentLoading();
     task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
   }
-  save(name, phone) {
+
+
+
+  async photos(name,phone) {
+
+    let cameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      targetWidth: 100,
+      targetHeight:100
+}
+      this.camera.getPicture(cameraOptions)
+ 
+      .then((file_uri) => {
+        this.presentLoading();
+        this.base64Image = 'data:image/jpeg;base64,' + file_uri;       
+       this.upload(name,phone);
+  })
+}
+upload(name,phone){
+  var currentDate = Date.now();
+  const file: any = this.base64ToImage(this.base64Image);
+  const filePath = `image/pic_${currentDate}`;
+  const fileRef = this.afs.ref(filePath);
+
+  const task = this.afs.upload(`image/pic_${currentDate}`, file);
+    task.snapshotChanges()
+      .pipe(finalize(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.subscribe(downloadURL => {
+          if (downloadURL) {
+            this.showSuccesfulUploadAlert();
+
+          }
+          console.log("downloaddddURL",downloadURL);
+          this.save(name,phone,downloadURL)
+        });
+      })
+      )
+      .subscribe(url => {
+        if (url) {
+          console.log(url);
+        }
+      });
+}
+
+async showSuccesfulUploadAlert() {
+  const alert = await this.alertCtrl.create({
+    cssClass: 'basic-alert',
+    header: 'Uploaded',
+    subHeader: 'Image uploaded successful',
+    message: 'Check Firebase storage.',
+    buttons: ['OK']
+  });
+
+  await alert.present();
+}
+
+base64ToImage(dataURI) {
+  const fileDate = dataURI.split(',');
+  // const mime = fileDate[0].match(/:(.*?);/)[1];
+  const byteString = atob(fileDate[1]);
+  const arrayBuffer = new ArrayBuffer(byteString.length);
+  const int8Array = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < byteString.length; i++) {
+    int8Array[i] = byteString.charCodeAt(i);
+  }
+  const blob = new Blob([arrayBuffer], { type: 'image/png' });
+  return blob;
+}
+
+  save(name, phone,downloadURL) {
+    this.presentLoading();
     console.log(this.cp);
-    const image = this.inputimageProd.nativeElement.value;
+  // const image = this.inputimageProd.nativeElement.value;
+  console.log("downloaddddURL in save",downloadURL);
+   
     const data = {
       name: name,
       phone: phone,
       mail: this.mail,
-      img: image || this.img,
+      img: downloadURL || this.img,
       uid: this.uid
     };
-    console.log(data);
+    console.log(data,"DATAAAA");
     if (this.cp === false) {
+      this.loadingController.dismiss();
       this.services.createUser(data).then(
         res => {
           console.log('Upload' + res);
-          this.rout.navigateByUrl('/tabs/profile-details');
+          this.loadingController.dismiss();
         });
     } else {
+      this.loadingController.dismiss();
       this.services.updateUser(data, this.uid).then(
         res => {
           console.log('Upload' + res);
-          this.rout.navigateByUrl('/tabs/profile-details');
+          this.loadingController.dismiss();
         });
     }
 
   }
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Loading image',
+      message: 'Loading Data.. Please Wait',
       duration: 2000
     });
     await loading.present();
@@ -134,4 +235,17 @@ export class ProfilePage implements OnInit {
   moveFocus(nextElement) {
     nextElement.setFocus();
   }
+
+    subscreibe(){
+      this.aio.isAvailable().then(()=>{
+        this.aio.show({}).then((val)=>{
+          alert(JSON.stringify(val));
+        },(err)=>{
+          alert(JSON.stringify(err));
+        })
+      },(err)=>{
+        alert("fingerprint not available");
+      })
+    }
 }
+

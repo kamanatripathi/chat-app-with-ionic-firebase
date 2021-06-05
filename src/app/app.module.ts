@@ -18,13 +18,16 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AutosizeModule} from 'ngx-autosize';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+// import { Camera, CameraResultType ,CameraSource, Photo } from '@capacitor/camera';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import{FingerprintAIO} from '@ionic-native/fingerprint-aio/ngx';
 const firebaseConfig = {
   apiKey: "AIzaSyCQs5lb5Fd58HZTdOX7HANcMZ6qzumrNl8",
   authDomain: "letsping-98365.firebaseapp.com",
@@ -50,10 +53,15 @@ const firebaseConfig = {
     AngularFireStorageModule,
     AutosizeModule ,
     FormsModule  ,    
-    RoundProgressModule,
+    RoundProgressModule, ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: environment.production,
+  // Register the ServiceWorker as soon as the app is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+}),
   ],
-  providers: [SplashScreen,StatusBar,Camera,FormBuilder,
-      FileChooser,File,FilePath,DatePipe,
+  providers: [SplashScreen,StatusBar,FormBuilder,
+      FileChooser,File,FilePath,DatePipe,Camera,FingerprintAIO,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy, }],
   bootstrap: [AppComponent],

@@ -42,30 +42,51 @@ export class ChatsPage implements OnInit {
     public storage: StorageService, public popoverController:PopoverController) 
     { 
       this.ngOnInit();
-      this.storage.get('user_uid').then(id=>{
-        this.db.database.app.firestore().collection('user').doc(id).get()
+    //   this.storage.get('user_uid').then(id=>{
+    //     this.db.database.app.firestore().collection('user').doc(id).get()
+    //     .then(data=>{ 
+    //       this.name= data.data()['name'];
+    //       this.mail=data.data()['mail'];
+    //       this.dp= data.data()['img'];
+    //     })
+
+    //   this.db.database.app.firestore().collection('user').get()
+    //   .then(data=>{ 
+    //     this.chat=[];
+    //       data.forEach(childata=>{
+    //         if(childata.data().uid != id){
+    //           this.chat.push(childata.data());  
+    //           console.log(this.chat)
+    //         } 
+    //     })
+    //   })
+    // })
+    this.ionViewDidEnter();
+    }
+
+      ionViewDidEnter(){
+        this.ngOnInit();
+        this.storage.get('user_uid').then(id=>{
+          this.db.database.app.firestore().collection('user').doc(id).get()
+          .then(data=>{ 
+            this.name= data.data()['name'];
+            this.mail=data.data()['mail'];
+            this.dp= data.data()['img'];
+          })
+  
+        this.db.database.app.firestore().collection('user').get()
         .then(data=>{ 
-          this.name= data.data()['name'];
-          this.mail=data.data()['mail'];
-          this.dp= data.data()['img'];
-        })
-
-      this.db.database.app.firestore().collection('user').get()
-      .then(data=>{ 
-        this.chat=[];
-          data.forEach(childata=>{
-            if(childata.data().uid != id){
-              this.chat.push(childata.data());  
-              console.log(this.chat)
-
-            } 
+          this.chat=[];
+            data.forEach(childata=>{
+              if(childata.data().uid != id){
+                this.chat.push(childata.data());  
+                console.log(this.chat)
+              } 
+          })
         })
       })
+      }
 
-
-
-    })
-    }
 
     // get(chatId) {
     //   return this.afs

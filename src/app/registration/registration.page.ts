@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.page.html',
@@ -14,7 +14,8 @@ export class RegistrationPage implements OnInit {
 
   passwordType = 'password';
   passwordIcon = 'eye-off';
-  constructor(public afr: AngularFireAuth, public rout: Router , public alertController: AlertController) { }
+  constructor(public afr: AngularFireAuth, public rout: Router , 
+    public alertController: AlertController,public loading:LoadingController) { }
 
   ngOnInit() {
   }
@@ -37,8 +38,16 @@ export class RegistrationPage implements OnInit {
     await alert.present();
   }
 
-  async presentLoading(loading) {
-    return await loading.present();
+  async presentLoading() {
+    const loading = await this.loading.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
   }
 
   async error(mensaje: string) {
@@ -56,16 +65,19 @@ moveFocus(nextElement) {
   nextElement.setFocus();
 }
   async register() {
+    this.presentLoading;
     const { email, password, cpassword } = this;
 
     if (password !== cpassword) {
       this.errorpassIguales();
+      this.loading.dismiss()
       this.rout.navigate(['/registration']);
     } else {
       try {
         await this.afr.createUserWithEmailAndPassword(email, password).then(data => {
           console.log(data);
           setTimeout( () => {
+            this.loading.dismiss();
             this.rout.navigate(['/tabs/profile']);
           }, 1000);
         });

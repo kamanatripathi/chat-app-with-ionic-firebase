@@ -21,6 +21,8 @@ interface Todo {
   styleUrls: ['./todo.page.scss'],
 })
 export class TodoPage implements OnInit {
+  today: number = Date.now();
+
   messages: Todo[];
   model: Todo;
   isEditing: boolean = false;
@@ -37,7 +39,8 @@ export class TodoPage implements OnInit {
     public router: Router,
     public firestore : EventsService,
     public storage:StorageService
-    ) {     
+    ) {  
+         
       // this.loadData();
       this.loadData1();
           this.model = {

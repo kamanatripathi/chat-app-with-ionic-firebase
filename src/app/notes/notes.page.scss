@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+
+*{
+    
+    font-family: Comfortaa;
+  }
+
+ion-card-title{
+  padding-top: 17px;
+  font-weight: bold;
+  padding-left: 20px;
+}
+ion-card-content{
+  overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}

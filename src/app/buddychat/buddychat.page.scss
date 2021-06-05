@@ -1,3 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+
+*{
+    
+    font-family: Comfortaa;
+  }
+.chat{
+    display: flex;
+    flex-direction: column;
+    .me{
+        position: relative;
+        margin: 20px 5px 0px;
+        max-width: 80%;
+        align-self: flex-end;
+        padding: 6px 10px 7px;
+        border-radius: 15px 15px 0;
+        background: #0f0101;
+        font-size: medium;
+        line-height: 1.4;
+        color: #ffffff;
+          }
+          .sc-ion-label-md-s>p {
+            color: #ffffff;
+        }
+    .you{
+        position: relative;
+        margin: 15px;
+        max-width: 80%;
+        align-self: flex-start;
+        padding: 6px 10px 7px;
+        border-radius: 15px 15px 0;
+        background: rgba(255, 116, 2, 0.63);
+        font-size: medium;
+        line-height: 1.4;
+        color: white;
+
+    }
+    .name{
+        font-size: small;
+        font-weight: bold;
+    }
+}
+.popover-content {
+    background: #222;
+  }
+  
+  /* Works - pass "my-custom-class" in cssClass to increase specificity */
+  .my-custom-class .popover-content {
+    background: #222;
+  }
+
+  .my-custom-class {
+    --background: #222;
+  }
 .message {
     p {
       color: #8a898b;

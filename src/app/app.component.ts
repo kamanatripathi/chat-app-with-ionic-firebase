@@ -35,7 +35,7 @@ export class AppComponent {
         console.log("data from storage", data);
         if (data !== null) {
           this.router.navigateByUrl('/tabs')
-          this.splashScreen.hide();
+          this.splashScreen.hide(); 
         } 
         else {
           this.router.navigateByUrl('/home')
